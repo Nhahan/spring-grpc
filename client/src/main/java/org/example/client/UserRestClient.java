@@ -1,6 +1,5 @@
 package org.example.client;
 
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.example.dto.RestUserRequest;
 import org.example.dto.RestUserResponse;
