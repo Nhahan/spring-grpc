@@ -14,12 +14,12 @@ public class ClientController {
 
 
     @GetMapping("/grpc")
-    public String grpc(@RequestParam(defaultValue = "World") String name) {
-        return userGrpcClient.sendUserData(name);
+    public String grpc(@RequestParam(defaultValue = "999") int itemCount) {
+        return userGrpcClient.sendUserData(itemCount);
     }
 
     @GetMapping("/rest")
-    public String rest(@RequestParam(defaultValue = "World") String name) {
-        return userRestClient.sendUserData(name);
+    public String rest(@RequestParam(defaultValue = "999") int itemCount) {
+        return userRestClient.sendUserData(itemCount);
     }
 }
