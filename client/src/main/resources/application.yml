@@ -5,5 +5,14 @@ spring:
 grpc:
   client:
     grpc-server:
-      address: "static://localhost:9090"
+      address: "static://grpc-server:9090"
       negotiationType: plaintext
+
+rest:
+  server:
+    url: "http://grpc-server:8081"
+
+server:
+  http2:
+    enabled: true
+  port: 8080

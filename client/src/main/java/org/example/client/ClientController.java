@@ -9,10 +9,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ClientController {
 
-    private final ClientService clientService;
+    private final GrpcClientService grpcClientService;
+    private final RestClientService restClientService;
 
-    @GetMapping("/greet")
-    public String greet(@RequestParam(name = "name", defaultValue = "World") String name) {
-        return clientService.sendHello(name);
+    @GetMapping("/grpc")
+    public String grpc(@RequestParam(defaultValue = "World") String name) {
+        return grpcClientService.sendHello(name);
+    }
+
+    @GetMapping("/rest")
+    public String rest(@RequestParam(defaultValue = "World") String name) {
+        return restClientService.sendHello(name);
     }
 }

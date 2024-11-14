@@ -1,13 +1,13 @@
 package org.example.client;
 
+import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.example.common.GreeterGrpc;
 import org.example.common.HelloReply;
 import org.example.common.HelloRequest;
 import org.springframework.stereotype.Service;
-import net.devh.boot.grpc.client.inject.GrpcClient;
 
 @Service
-public class ClientService {
+public class GrpcClientService {
 
     @GrpcClient("grpc-server")
     private GreeterGrpc.GreeterBlockingStub greeterBlockingStub;

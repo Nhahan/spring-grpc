@@ -1,4 +1,4 @@
-package org.example.server;
+package org.example.grpcserver;
 
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.example.common.GreeterGrpc;
@@ -7,7 +7,7 @@ import org.example.common.HelloRequest;
 import io.grpc.stub.StreamObserver;
 
 @GrpcService
-public class GreeterService extends GreeterGrpc.GreeterImplBase {
+public class GreeterGrpcService extends GreeterGrpc.GreeterImplBase {
 
     @Override
     public void sayHello(HelloRequest request, StreamObserver<HelloReply> responseObserver) {

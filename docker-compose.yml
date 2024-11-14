@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  server:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    container_name: grpc-server
+    ports:
+      - "9090:9090" # gRPC
+      - "8081:8081" # REST
+
+  client:
+    build:
+      context: .
+      dockerfile: client/Dockerfile
+    container_name: grpc-client
+    ports:
+      - "8080:8080"
+    depends_on:
+      - server
