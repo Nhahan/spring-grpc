@@ -11,7 +11,7 @@ public class ClientController {
 
     private final UserGrpcClient userGrpcClient;
     private final UserRestClient userRestClient;
-
+    private final TestService testService;
 
     @GetMapping("/grpc")
     public String grpc(@RequestParam(defaultValue = "999") int itemCount) {
@@ -21,5 +21,10 @@ public class ClientController {
     @GetMapping("/rest")
     public String rest(@RequestParam(defaultValue = "999") int itemCount) {
         return userRestClient.sendUserData(itemCount);
+    }
+
+    @GetMapping("/test")
+    public String test(@RequestParam(defaultValue = "10") int testCount, @RequestParam(defaultValue = "999") int itemCount) {
+        return testService.runPerformanceTest(testCount, itemCount);
     }
 }
