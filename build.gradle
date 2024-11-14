@@ -21,13 +21,12 @@ ext {
 }
 
 subprojects {
+    apply plugin: 'java'
     apply plugin: 'com.google.protobuf'
     if (project.name != 'common') {
         apply plugin: 'org.springframework.boot'
         apply plugin: 'io.spring.dependency-management'
     }
-
-    apply plugin: 'java'
 
     sourceCompatibility = '17'
     targetCompatibility = '17'
