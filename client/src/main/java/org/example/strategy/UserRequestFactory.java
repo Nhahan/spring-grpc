@@ -1,4 +1,4 @@
-package org.example.client.strategy;
+package org.example.strategy;
 
 public class UserRequestFactory<T> {
 

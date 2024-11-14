@@ -1,11 +1,11 @@
 package org.example.client;
 
 import net.devh.boot.grpc.client.inject.GrpcClient;
-import org.example.client.strategy.GrpcUserRequestStrategy;
-import org.example.client.strategy.UserRequestFactory;
 import org.example.common.UserGrpc;
 import org.example.common.UserRequest;
 import org.example.common.UserResponse;
+import org.example.strategy.GrpcUserRequestStrategy;
+import org.example.strategy.UserRequestFactory;
 import org.springframework.stereotype.Component;
 
 @Component

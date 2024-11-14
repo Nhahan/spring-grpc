@@ -1,4 +1,4 @@
-package org.example.client.dto;
+package org.example.dto;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-public class UserRequest {
+public class RestUserRequest {
     private String id;
     private UserDetails user;
     @Singular
@@ -51,15 +51,5 @@ public class UserRequest {
     @Builder
     public static class UserResponse {
         private String message;
-        private List<ItemSummary> itemSummaries;
-    }
-
-    @Getter
-    @Setter
-    @Builder
-    public static class ItemSummary {
-        private String itemId;
-        private String name;
-        private float totalPrice;
     }
 }

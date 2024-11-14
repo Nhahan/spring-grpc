@@ -1,4 +1,4 @@
-package org.example.client.strategy;
+package org.example.strategy;
 
 import org.example.common.Address;
 import org.example.common.Item;
@@ -22,7 +22,7 @@ public class GrpcUserRequestStrategy implements UserRequestStrategy<UserRequest>
                                 .build())
                         .build());
 
-        for (int i = 0; i < itemCount; i++) {
+        for (int i = 0; i < itemCount + 1; i++) {
             requestBuilder.addItems(Item.newBuilder()
                     .setItemId("item" + i)
                     .setName("Item" + i)

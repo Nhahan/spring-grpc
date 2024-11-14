@@ -1,9 +1,11 @@
 package org.example.client;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.example.client.dto.UserRequest;
-import org.example.client.strategy.RestUserRequestStrategy;
-import org.example.client.strategy.UserRequestFactory;
+import org.example.dto.RestUserRequest;
+import org.example.dto.RestUserResponse;
+import org.example.strategy.RestUserRequestStrategy;
+import org.example.strategy.UserRequestFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -18,9 +20,10 @@ public class UserRestClient {
     private String serverUrl;
 
     public String sendUserData(int itemCount) {
-        UserRequestFactory<UserRequest> restFactory =
+        UserRequestFactory<RestUserRequest> restFactory =
                 new UserRequestFactory<>(new RestUserRequestStrategy());
-        UserRequest request = restFactory.createUserRequest(itemCount);
-        return restTemplate.postForObject(serverUrl + "/test", request, String.class);
+        RestUserRequest request = restFactory.createUserRequest(itemCount);
+        RestUserResponse response = restTemplate.postForObject(serverUrl + "/test", request, RestUserResponse.class);
+        return response.getMessage();
     }
 }

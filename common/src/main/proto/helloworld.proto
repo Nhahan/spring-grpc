@@ -39,7 +39,6 @@ message Item {
 
 message UserResponse {
   string message = 1;
-  repeated ItemSummary itemSummaries = 2;
 }
 
 message ItemSummary {

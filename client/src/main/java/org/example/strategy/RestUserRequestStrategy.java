@@ -1,18 +1,18 @@
-package org.example.client.strategy;
+package org.example.strategy;
 
-import org.example.client.dto.UserRequest;
+import org.example.dto.RestUserRequest;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RestUserRequestStrategy implements UserRequestStrategy<UserRequest> {
+public class RestUserRequestStrategy implements UserRequestStrategy<RestUserRequest> {
 
     @Override
-    public UserRequest createUserRequest(int itemCount) {
-        List<UserRequest.Item> items = new ArrayList<>();
+    public RestUserRequest createUserRequest(int itemCount) {
+        List<RestUserRequest.Item> items = new ArrayList<>();
 
-        for (int i = 0; i < itemCount; i++) {
-            items.add(UserRequest.Item.builder()
+        for (int i = 0; i < itemCount + 1; i++) {
+            items.add(RestUserRequest.Item.builder()
                     .itemId("item" + i)
                     .name("Item" + i)
                     .description("Description for item " + i)
@@ -21,12 +21,12 @@ public class RestUserRequestStrategy implements UserRequestStrategy<UserRequest>
                     .build());
         }
 
-        return UserRequest.builder()
+        return RestUserRequest.builder()
                 .id("12345")
-                .user(UserRequest.UserDetails.builder()
+                .user(RestUserRequest.UserDetails.builder()
                         .username("defaultUser")
                         .email("defaultUser@example.com")
-                        .address(UserRequest.Address.builder()
+                        .address(RestUserRequest.Address.builder()
                                 .street("123 Main St")
                                 .city("Metropolis")
                                 .state("NY")
