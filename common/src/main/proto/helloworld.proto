@@ -2,18 +2,48 @@ syntax = "proto3";
 
 option java_multiple_files = true;
 option java_package = "org.example.common";
-option java_outer_classname = "HelloWorldProto";
+option java_outer_classname = "UserProto";
 
-package helloworld;
+package user;
 
-service Greeter {
-  rpc SayHello (HelloRequest) returns (HelloReply) {}
+service User {
+  rpc SendUserData (UserRequest) returns (UserResponse) {}
 }
 
-message HelloRequest {
-  string name = 1;
+message UserRequest {
+  string id = 1;
+  UserDetails user = 2;
+  repeated Item items = 3;
 }
 
-message HelloReply {
+message UserDetails {
+  string username = 1;
+  string email = 2;
+  Address address = 3;
+}
+
+message Address {
+  string street = 1;
+  string city = 2;
+  string state = 3;
+  string zip = 4;
+}
+
+message Item {
+  string itemId = 1;
+  string name = 2;
+  string description = 3;
+  float price = 4;
+  int32 quantity = 5;
+}
+
+message UserResponse {
   string message = 1;
+  repeated ItemSummary itemSummaries = 2;
+}
+
+message ItemSummary {
+  string itemId = 1;
+  string name = 2;
+  float totalPrice = 3;
 }

@@ -1,21 +1,39 @@
 version: '3.8'
 
 services:
-  server:
-    build:
-      context: .
-      dockerfile: server/Dockerfile
-    container_name: grpc-server
-    ports:
-      - "9090:9090" # gRPC
-      - "8081:8081" # REST
-
   client:
     build:
       context: .
       dockerfile: client/Dockerfile
-    container_name: grpc-client
+    container_name: client
     ports:
       - "8080:8080"
     depends_on:
-      - server
+      - rest-server
+      - grpc-server
+    networks:
+      - app-network
+
+  rest-server:
+    build:
+      context: .
+      dockerfile: rest-server/Dockerfile
+    container_name: rest-server
+    ports:
+      - "8081:8081"
+    networks:
+      - app-network
+
+  grpc-server:
+    build:
+      context: .
+      dockerfile: grpc-server/Dockerfile
+    container_name: grpc-server
+    ports:
+      - "9090:9090"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

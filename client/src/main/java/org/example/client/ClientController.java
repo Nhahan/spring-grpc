@@ -9,16 +9,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ClientController {
 
-    private final GrpcClientService grpcClientService;
-    private final RestClientService restClientService;
+    private final UserGrpcClient userGrpcClient;
+    private final UserRestClient userRestClient;
+
 
     @GetMapping("/grpc")
     public String grpc(@RequestParam(defaultValue = "World") String name) {
-        return grpcClientService.sendHello(name);
+        return userGrpcClient.sendUserData(name);
     }
 
     @GetMapping("/rest")
     public String rest(@RequestParam(defaultValue = "World") String name) {
-        return restClientService.sendHello(name);
+        return userRestClient.sendUserData(name);
     }
 }

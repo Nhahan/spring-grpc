@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: rest-server
+
+server:
+  port: 8081

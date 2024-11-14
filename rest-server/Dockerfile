@@ -7,8 +7,8 @@ WORKDIR /home/gradle/project
 # Copy the entire project
 COPY . .
 
-# Build the grpc-server JAR using Gradle
-RUN gradle :grpc-server:clean build --no-daemon
+# Build the rest-server JAR using Gradle
+RUN gradle :rest-server:clean build --no-daemon
 
 # Stage 2: Run
 FROM amazoncorretto:17-alpine AS runtime
@@ -17,10 +17,10 @@ FROM amazoncorretto:17-alpine AS runtime
 WORKDIR /app
 
 # Copy the built server JAR from the build stage
-COPY --from=build /home/gradle/project/grpc-server/build/libs/*.jar grpc-server.jar
+COPY --from=build /home/gradle/project/rest-server/build/libs/*.jar rest-server.jar
 
-# Expose the gRPC port
-EXPOSE 9090
+# Expose the REST port
+EXPOSE 9090 8081
 
 # Run the server
-ENTRYPOINT ["java", "-jar", "grpc-server.jar"]
+ENTRYPOINT ["java", "-jar", "rest-server.jar"]

@@ -9,10 +9,9 @@ grpc:
       negotiationType: plaintext
 
 rest:
-  server:
-    url: "http://grpc-server:8081"
+  client:
+    rest-server:
+      address: "http://rest-server:8081"
 
 server:
-  http2:
-    enabled: true
   port: 8080
