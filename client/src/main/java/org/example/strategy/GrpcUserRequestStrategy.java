@@ -1,9 +1,9 @@
 package org.example.strategy;
 
-import org.example.common.Address;
-import org.example.common.Item;
-import org.example.common.UserDetails;
-import org.example.common.UserRequest;
+import org.example.proto.Address;
+import org.example.proto.Item;
+import org.example.proto.UserDetails;
+import org.example.proto.UserRequest;
 
 public class GrpcUserRequestStrategy implements UserRequestStrategy<UserRequest> {
 

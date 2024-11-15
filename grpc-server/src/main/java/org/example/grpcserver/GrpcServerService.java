@@ -3,9 +3,9 @@ package org.example.grpcserver;
 import io.grpc.stub.StreamObserver;
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
-import org.example.common.UserGrpc;
-import org.example.common.UserRequest;
-import org.example.common.UserResponse;
+import org.example.proto.UserGrpc;
+import org.example.proto.UserRequest;
+import org.example.proto.UserResponse;
 
 @Slf4j
 @GrpcService
