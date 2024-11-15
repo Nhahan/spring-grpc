@@ -50,10 +50,11 @@ The table below compares gRPC and REST speeds for different `requestCount` value
 
 | requestCount | gRPC Duration (s) | REST Duration (s) |
 |--------------|-------------------|-------------------|
-| 1000         | 0.646              | 0.823              |
-| 10000        | 7.062               | 9.022               |
-| 100000          | 49.793               | 86.636               |
-| 1000000         | 553.392              | 851.624             |
+| 1,000        | 0.737             | 1.121             |
+| 10,000       | 5.524             | 8.225             |
+| 100,000      | 51.341            | 79.357            |
+| 1,000,000    | 460.791           | 740.651           |
+| 10,000,000   | 4,599.891         | 8,955.372         |
 
 > **Note**: Measured on an M1 Pro base model.
 
