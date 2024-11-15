@@ -16,7 +16,7 @@ public class TestService {
     private final UserGrpcClient userGrpcClient;
     private final UserRestClient userRestClient;
 
-    public String runPerformanceTest(int testCount, int itemCount) {
+    public String runPerformanceTest(int requestCount, int itemCount) {
         System.out.println("Warming up...");
         for (int i = 0; i < 3; i++) {
             try {
@@ -35,7 +35,7 @@ public class TestService {
             AtomicInteger successCount = new AtomicInteger(0);
             AtomicInteger failCount = new AtomicInteger(0);
 
-            List<CompletableFuture<Void>> grpcFutures = IntStream.range(0, testCount)
+            List<CompletableFuture<Void>> grpcFutures = IntStream.range(0, requestCount)
                     .mapToObj(i -> CompletableFuture.runAsync(() -> {
                         try {
                             userGrpcClient.sendUserData(itemCount);
@@ -58,7 +58,7 @@ public class TestService {
             AtomicInteger successCount = new AtomicInteger(0);
             AtomicInteger failCount = new AtomicInteger(0);
 
-            List<CompletableFuture<Void>> restFutures = IntStream.range(0, testCount)
+            List<CompletableFuture<Void>> restFutures = IntStream.range(0, requestCount)
                     .mapToObj(i -> CompletableFuture.runAsync(() -> {
                         try {
                             userRestClient.sendUserData(itemCount);
@@ -82,7 +82,7 @@ public class TestService {
 
         double totalDuration = (System.nanoTime() - startTime) / 1_000_000_000.0;
 
-        return formatResults(grpcResult, restResult, testCount, itemCount, totalDuration);
+        return formatResults(grpcResult, restResult, requestCount, itemCount, totalDuration);
     }
 
     private String formatResults(TestResult grpcResult,
