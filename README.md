@@ -2,9 +2,13 @@
 
 This project's main goal is to provide a boilerplate for integrating **Spring Boot version 3.x**, **gRPC version 1.68.x**, and **Protocol Buffers version 4.x**. Additionally, it includes a performance comparison between gRPC and REST.
 
+<br>
+
 ## Prerequisites
 
 ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white): Required to build and run the project modules using Docker Compose.
+
+<br>
 
 ## Modules
 
@@ -19,6 +23,8 @@ This project's main goal is to provide a boilerplate for integrating **Spring Bo
 
 - **proto**: Contains protocol buffer definitions shared between modules for consistent data structures across gRPC services.
 
+<br>
+
 ## Usage
 
 Once the services are running, you can access the following `client` endpoints:
@@ -28,6 +34,8 @@ Once the services are running, you can access the following `client` endpoints:
 | **`/grpc`**           | `http://localhost:8080/grpc`            | Sends a request to `grpc-server`.                       |
 | **`/rest`**           | `http://localhost:8080/rest`            | Sends a request to `rest-server`.                       |
 | **`/test`**           | `http://localhost:8080/test?testCount=1000` | Sends `testCount` requests to compare REST and gRPC performance. |
+
+<br>
 
 ## Setup and Execution
 
@@ -43,6 +51,8 @@ Once the services are running, you can access the following `client` endpoints:
    ```bash
    docker-compose up -d
     ```
+
+<br>
 
 ## License
 
