@@ -1,5 +1,6 @@
 package org.example.client;
 
+import org.example.client.TestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
