@@ -24,7 +24,7 @@ public class ClientController {
     }
 
     @GetMapping("/test")
-    public String test(@RequestParam(defaultValue = "10") int testCount, @RequestParam(defaultValue = "999") int itemCount) {
+    public String test(@RequestParam(defaultValue = "1000") int testCount, @RequestParam(defaultValue = "999") int itemCount) {
         return testService.runPerformanceTest(testCount, itemCount);
     }
 }

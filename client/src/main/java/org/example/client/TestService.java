@@ -1,90 +1,119 @@
 package org.example.client;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.DoubleSummaryStatistics;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TestService {
-
     private final UserGrpcClient userGrpcClient;
     private final UserRestClient userRestClient;
 
     public String runPerformanceTest(int testCount, int itemCount) {
         System.out.println("Warming up...");
         for (int i = 0; i < 3; i++) {
-            userGrpcClient.sendUserData(10);
-            userRestClient.sendUserData(10);
+            try {
+                userGrpcClient.sendUserData(10);
+                userRestClient.sendUserData(10);
+            } catch (Exception e) {
+                log.warn("Warmup failed: {}", e.getMessage());
+            }
         }
 
         System.out.println("Starting concurrent tests...");
         long startTime = System.nanoTime();
 
-        List<CompletableFuture<String>> grpcFutures = IntStream.range(0, testCount)
-                .mapToObj(i -> CompletableFuture.supplyAsync(() -> userGrpcClient.sendUserData(itemCount)))
-                .toList();
+        CompletableFuture<TestResult> grpcTest = CompletableFuture.supplyAsync(() -> {
+            long testStart = System.nanoTime();
+            AtomicInteger successCount = new AtomicInteger(0);
+            AtomicInteger failCount = new AtomicInteger(0);
 
-        List<CompletableFuture<String>> restFutures = IntStream.range(0, testCount)
-                .mapToObj(i -> CompletableFuture.supplyAsync(() -> userRestClient.sendUserData(itemCount)))
-                .toList();
+            List<CompletableFuture<Void>> grpcFutures = IntStream.range(0, testCount)
+                    .mapToObj(i -> CompletableFuture.runAsync(() -> {
+                        try {
+                            userGrpcClient.sendUserData(itemCount);
+                            successCount.incrementAndGet();
+                        } catch (Exception e) {
+                            failCount.incrementAndGet();
+                            log.error("gRPC request failed: {}", e.getMessage());
+                        }
+                    }))
+                    .toList();
 
-        List<CompletableFuture<TestResult>> allFutures = new ArrayList<>();
+            CompletableFuture.allOf(grpcFutures.toArray(new CompletableFuture[0])).join();
+            double duration = (System.nanoTime() - testStart) / 1_000_000_000.0;
 
-        grpcFutures.forEach(future ->
-                allFutures.add(future.thenApply(result ->
-                        new TestResult("gRPC", System.nanoTime())
-                ))
-        );
-
-        restFutures.forEach(future ->
-                allFutures.add(future.thenApply(result ->
-                        new TestResult("REST", System.nanoTime())
-                ))
-        );
-
-        // wait for all futures to complete
-        CompletableFuture.allOf(allFutures.toArray(new CompletableFuture[0])).join();
-
-        // get results
-        List<TestResult> results = allFutures.stream()
-                .map(CompletableFuture::join)
-                .toList();
-
-        Map<String, DoubleSummaryStatistics> stats = results.stream()
-                .collect(Collectors.groupingBy(
-                        TestResult::type,
-                        Collectors.summarizingDouble(r -> (r.timestamp - startTime) / 1_000_000_000.0)
-                ));
-
-        return formatResults(stats, testCount, itemCount);
-    }
-
-    private String formatResults(Map<String, DoubleSummaryStatistics> stats, int testCount, int itemCount) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(String.format("Test(testCount: %d, itemCount: %d)\n", testCount, itemCount));
-
-        stats.forEach((type, stat) -> {
-            sb.append(String.format("""
-                %s Results:
-                Average: %.2f seconds
-                Min: %.2f seconds
-                Max: %.2f seconds
-                Count: %d
-                """,
-                    type, stat.getAverage(), stat.getMin(), stat.getMax(), stat.getCount()
-            ));
+            return new TestResult("gRPC", duration, successCount.get(), failCount.get());
         });
 
-        return sb.toString();
+        CompletableFuture<TestResult> restTest = CompletableFuture.supplyAsync(() -> {
+            long testStart = System.nanoTime();
+            AtomicInteger successCount = new AtomicInteger(0);
+            AtomicInteger failCount = new AtomicInteger(0);
+
+            List<CompletableFuture<Void>> restFutures = IntStream.range(0, testCount)
+                    .mapToObj(i -> CompletableFuture.runAsync(() -> {
+                        try {
+                            userRestClient.sendUserData(itemCount);
+                            successCount.incrementAndGet();
+                        } catch (Exception e) {
+                            failCount.incrementAndGet();
+                            log.error("REST request failed: {}", e.getMessage());
+                        }
+                    }))
+                    .toList();
+
+            CompletableFuture.allOf(restFutures.toArray(new CompletableFuture[0])).join();
+            double duration = (System.nanoTime() - testStart) / 1_000_000_000.0;
+
+            return new TestResult("REST", duration, successCount.get(), failCount.get());
+        });
+
+        // wait for all tests to complete
+        TestResult grpcResult = grpcTest.join();
+        TestResult restResult = restTest.join();
+
+        double totalDuration = (System.nanoTime() - startTime) / 1_000_000_000.0;
+
+        return formatResults(grpcResult, restResult, testCount, itemCount, totalDuration);
     }
 
-    private record TestResult(String type, long timestamp) {}
+    private String formatResults(TestResult grpcResult,
+                                 TestResult restResult,
+                                 int testCount,
+                                 int itemCount,
+                                 double totalDuration) {
+        return String.format("""
+            Test Results (requests: %d, items: %d)
+            Total test time: %.3f seconds
+            
+            gRPC Results:
+            Total time: %.3f seconds
+            Success: %d
+            Failed: %d
+            
+            REST Results:
+            Total time: %.3f seconds
+            Success: %d
+            Failed: %d""",
+                testCount,
+                itemCount,
+                totalDuration,
+                grpcResult.duration(),
+                grpcResult.successCount(),
+                grpcResult.failCount(),
+                restResult.duration(),
+                restResult.successCount(),
+                restResult.failCount()
+        );
+    }
+
+    private record TestResult(String type, double duration, int successCount, int failCount) {}
 }
