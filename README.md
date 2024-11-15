@@ -59,4 +59,4 @@ The table below compares gRPC and REST speeds for different `requestCount` value
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
+This project is licensed under the CC0 1.0 Universal (CC0 1.0) Public Domain Dedication. See the [LICENSE](./LICENSE) file for details.
