@@ -1,14 +1,10 @@
 # Spring gRPC
 
-This project's main goal is to provide a boilerplate for integrating **Spring Boot version 3.x**, **gRPC version 1.68.x**, and **Protocol Buffers version 4.x**. Additionally, it includes a performance comparison between gRPC and REST.
-
-<br>
+This project's main goal is to provide a boilerplate for integrating **Spring Boot version 3.x**, **gRPC version 1.68.x**, and **Protocol Buffers version 4.x**. Additionally, it includes a performance comparison between gRPC and REST.  
 
 ## Prerequisites
 
 ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white): Required to build and run the project modules using Docker Compose.
-
-<br>
 
 ## Modules
 
@@ -23,19 +19,15 @@ This project's main goal is to provide a boilerplate for integrating **Spring Bo
 
 - **proto**: Contains protocol buffer definitions shared between modules for consistent data structures across gRPC services.
 
-<br>
-
 ## Usage
 
-Once the services are running, you can access the following `client` endpoints:
+Once the `client` service is running, you can access the following endpoints:
 
-| Endpoint              | URL                                      | Description                                             |
-|-----------------------|------------------------------------------|---------------------------------------------------------|
-| **`/grpc`**           | `http://localhost:8080/grpc`            | Sends a request to `grpc-server`.                       |
-| **`/rest`**           | `http://localhost:8080/rest`            | Sends a request to `rest-server`.                       |
-| **`/test`**           | `http://localhost:8080/test?testCount=1000` | Sends `testCount` requests to compare REST and gRPC performance. |
-
-<br>
+| Endpoint              | URL                                          | Description                                                      |
+|-----------------------|----------------------------------------------|------------------------------------------------------------------|
+| **`/grpc`**           | `http://localhost:8080/grpc`                | Sends a request to `grpc-server`.                                |
+| **`/rest`**           | `http://localhost:8080/rest`                | Sends a request to `rest-server`.                                |
+| **`/test`**           | `http://localhost:8080/test?requestCount=1000` | Sends `requestCount` requests to compare REST and gRPC performance. |
 
 ## Setup and Execution
 
@@ -46,13 +38,24 @@ Once the services are running, you can access the following `client` endpoints:
    cd spring-grpc
     ```
 
-2. Run the project using Docker Compose in detached mode:
+2. Run the project using Docker Compose:
 
    ```bash
    docker-compose up -d
     ```
 
-<br>
+## Performance Comparison
+
+The table below compares gRPC and REST speeds for different `requestCount` values.
+
+| requestCount | gRPC Duration (s) | REST Duration (s) |
+|--------------|-------------------|-------------------|
+| 1000         | 0.646              | 0.823              |
+| 10000        | 7.062               | 9.022               |
+| 100000          | 49.793               | 86.636               |
+| 1000000         | 553.392              | 851.624             |
+
+> **Note**: Measured on an M1 Pro base model.
 
 ## License
 
