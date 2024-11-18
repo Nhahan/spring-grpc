@@ -55,6 +55,7 @@ The table below compares gRPC and REST speeds for different `requestCount` value
 | 100,000      | 51.341            | 79.357            |
 | 1,000,000    | 460.791           | 740.651           |
 | 10,000,000   | 4,599.891         | 8,955.372         |
+| 100,000,000  | 41,359.793        | 82,250.110        |
 
 > **Note**: Measured on an M1 Pro base model.
 
